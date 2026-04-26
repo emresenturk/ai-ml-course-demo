@@ -125,7 +125,7 @@ export const getFitRecommendation = async (
   product: ProductAttributes
 ): Promise<RecommendationResponse> => {
   try {
-    const response = await fetch('http://localhost:8000/api/recommend', {
+    const response = await fetch('/api/recommend', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
