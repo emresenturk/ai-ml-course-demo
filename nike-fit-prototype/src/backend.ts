@@ -89,36 +89,6 @@ export const CATALOG_PRODUCTS: ProductAttributes[] = [
   }
 ];
 
-// 2. Hybrid Logic Layer
-const simulateClassifier = (customer: CustomerData, product: ProductAttributes): { size: number; confidence: number } => {
-  // Mock Gradient Boosted Tree selecting size based on history and SKU
-  // Customer usually buys size 10. They returned AF1 in size 10 for being "too small".
-  // Product tags include "runs narrow".
-  // The classifier logically predicts a half-size up (10.5).
-  return { size: 10.5, confidence: 88 };
-};
-
-const simulateRulesEngine = (recommendedSize: number, product: ProductAttributes): { finalSize: number; warning: boolean; fallback?: number } => {
-  // Hardcoded safety constraint: If inventory is 0, fall back to next best size or show warning.
-  if (product.inventory[recommendedSize] === 0) {
-    // If 10.5 was recommended but out of stock, fallback to 11.
-    // In our mock, 10.5 is in stock (8), but let's test the logic.
-    return { finalSize: recommendedSize + 0.5, warning: true, fallback: recommendedSize };
-  }
-  return { finalSize: recommendedSize, warning: false };
-};
-
-const simulateExplanationService = (customer: CustomerData, product: ProductAttributes, recommendedSize: number): string => {
-  // Mock LLM call generating natural language "Why" based on embeddings/tags
-  const recentPurchases = customer.order_history.filter((o) => o.status === 'kept').map((o) => o.product_name);
-  const narrowTag = product.tags.includes('runs narrow');
-
-  if (narrowTag) {
-    return `Based on your purchase of the ${recentPurchases[0]} and reviews saying this model runs narrow, we suggest a half-size up to a ${recommendedSize}.`;
-  }
-  return `Based on your purchase history and this product's fit profile, we recommend a size ${recommendedSize}.`;
-};
-
 // Real Inference API (Calling Python/FastAPI Backend)
 export const getFitRecommendation = async (
   customer: CustomerData,

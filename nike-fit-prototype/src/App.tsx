@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SparklesIcon, XMarkIcon, HandThumbUpIcon, HandThumbDownIcon, TrashIcon, ArrowLeftIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { SparklesIcon as SparklesSolid } from '@heroicons/react/24/solid';
-import { getFitRecommendation, SAMPLE_CUSTOMER, CATALOG_PRODUCTS, AVAILABLE_PRODUCTS, type RecommendationResponse, type CustomerData, type Order, type ProductAttributes } from './mockBackend';
+import { getFitRecommendation, SAMPLE_CUSTOMER, CATALOG_PRODUCTS, AVAILABLE_PRODUCTS, type RecommendationResponse, type CustomerData, type Order, type ProductAttributes } from './backend';
 
 function App() {
   const [view, setView] = useState<'catalog' | 'pdp' | 'profile'>('catalog');
   const [customer, setCustomer] = useState<CustomerData>(SAMPLE_CUSTOMER);
   const [currentProduct, setCurrentProduct] = useState<ProductAttributes>(CATALOG_PRODUCTS[0]);
-  
+
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,12 +47,12 @@ function App() {
           <a href="#" className="hover:text-gray-500 transition-colors">Sale</a>
         </div>
         <div className="flex space-x-4">
-          <button 
+          <button
             onClick={() => setView('profile')}
             className={`w-9 h-9 rounded-full flex items-center justify-center text-xs overflow-hidden cursor-pointer border-2 transition-all ${view === 'profile' ? 'border-neutral-900 ring-2 ring-neutral-200' : 'border-neutral-200 hover:border-neutral-900'}`}
             title="Edit Profile & History"
           >
-            <img src="https://i.pravatar.cc/100?img=33" alt="Profile" className="w-full h-full object-cover"/>
+            <img src="https://i.pravatar.cc/100?img=33" alt="Profile" className="w-full h-full object-cover" />
           </button>
         </div>
       </nav>
@@ -65,9 +65,9 @@ function App() {
           <h1 className="text-4xl font-black mb-8 tracking-tight">Latest Drops</h1>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {CATALOG_PRODUCTS.map(product => (
-              <div 
-                key={product.id} 
-                className="cursor-pointer group" 
+              <div
+                key={product.id}
+                className="cursor-pointer group"
                 onClick={() => {
                   setCurrentProduct(product);
                   setView('pdp');
@@ -91,18 +91,18 @@ function App() {
           {/* Left Column: Product Images */}
           <div className="lg:w-2/3 space-y-4">
             <div className="aspect-[4/3] bg-[#f5f5f5] rounded-2xl overflow-hidden group relative">
-              <img 
-                src={currentProduct.images[0]} 
-                alt={currentProduct.name} 
+              <img
+                src={currentProduct.images[0]}
+                alt={currentProduct.name}
                 className="w-full h-full object-cover object-center mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-square bg-[#f5f5f5] rounded-2xl overflow-hidden">
-                <img src={currentProduct.images[0]} alt="Detail 1" className="w-full h-full object-cover mix-blend-multiply scale-150 origin-bottom-left"/>
+                <img src={currentProduct.images[0]} alt="Detail 1" className="w-full h-full object-cover mix-blend-multiply scale-150 origin-bottom-left" />
               </div>
               <div className="aspect-square bg-[#f5f5f5] rounded-2xl overflow-hidden">
-                <img src={currentProduct.images[0]} alt="Detail 2" className="w-full h-full object-cover mix-blend-multiply scale-150 origin-top-right"/>
+                <img src={currentProduct.images[0]} alt="Detail 2" className="w-full h-full object-cover mix-blend-multiply scale-150 origin-top-right" />
               </div>
             </div>
           </div>
@@ -118,9 +118,9 @@ function App() {
             <div className="mb-8">
               <div className="flex justify-between items-baseline mb-4">
                 <h2 className="font-semibold text-lg">Select Size</h2>
-                
+
                 {/* Find Your Fit Button */}
-                <button 
+                <button
                   onClick={handleFindFit}
                   className="flex items-center text-sm font-bold text-[#ff6600] hover:text-[#cc5200] transition-colors group"
                 >
@@ -138,20 +138,19 @@ function App() {
                       key={size}
                       disabled={isOutOfStock}
                       onClick={() => setSelectedSize(size)}
-                      className={`py-3 px-4 rounded-lg border text-center transition-all ${
-                        isOutOfStock 
-                          ? 'bg-neutral-100 text-neutral-400 border-neutral-200 cursor-not-allowed opacity-60 line-through' 
-                          : isSelected 
-                            ? 'border-neutral-900 ring-1 ring-neutral-900 bg-neutral-900 text-white shadow-md' 
-                            : 'border-neutral-200 hover:border-neutral-900 text-neutral-900 bg-white hover:bg-neutral-50'
-                      }`}
+                      className={`py-3 px-4 rounded-lg border text-center transition-all ${isOutOfStock
+                        ? 'bg-neutral-100 text-neutral-400 border-neutral-200 cursor-not-allowed opacity-60 line-through'
+                        : isSelected
+                          ? 'border-neutral-900 ring-1 ring-neutral-900 bg-neutral-900 text-white shadow-md'
+                          : 'border-neutral-200 hover:border-neutral-900 text-neutral-900 bg-white hover:bg-neutral-50'
+                        }`}
                     >
                       US {size}
                     </button>
                   )
                 })}
               </div>
-              
+
               {selectedSize && currentProduct.inventory[selectedSize] === 0 && (
                 <p className="mt-3 text-sm text-red-500 font-medium">This size is out of stock.</p>
               )}
@@ -163,7 +162,7 @@ function App() {
             <button className="w-full bg-white text-neutral-900 border border-neutral-300 py-4 rounded-full font-bold hover:border-neutral-900 transition-colors">
               Favorite
             </button>
-            
+
             <p className="mt-8 text-neutral-500 text-sm leading-relaxed border-t border-neutral-200 pt-6">
               This {currentProduct.silhouette.toLowerCase()} silhouette features premium {currentProduct.material.toLowerCase()} materials. Tags: {currentProduct.tags.join(', ')}.
             </p>
@@ -173,10 +172,10 @@ function App() {
         /* -------------------------------------------------------------
            PROFILE & ORDER HISTORY VIEW
            ------------------------------------------------------------- */
-        <ProfileEditor 
-          customer={customer} 
-          setCustomer={setCustomer} 
-          onBack={() => setView('pdp')} 
+        <ProfileEditor
+          customer={customer}
+          setCustomer={setCustomer}
+          onBack={() => setView('pdp')}
         />
       )}
 
@@ -185,17 +184,17 @@ function App() {
         {isModalOpen && (
           <>
             {/* Backdrop */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-neutral-900/60 backdrop-blur-md z-40"
               onClick={() => setIsModalOpen(false)}
             />
-            
+
             {/* Modal Content */}
             <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none px-4">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 30, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -211,7 +210,7 @@ function App() {
                     </div>
                     <h3 className="text-2xl font-black text-neutral-900 tracking-tight">Your Perfect Fit</h3>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setIsModalOpen(false)}
                     className="p-2 bg-white/80 rounded-full text-neutral-500 hover:text-neutral-900 hover:bg-white transition-colors shadow-sm"
                   >
@@ -229,7 +228,7 @@ function App() {
                     <div className="space-y-6">
                       {/* Recommended Size Display */}
                       <div className="text-center">
-                        <button 
+                        <button
                           onClick={() => {
                             if (!recommendation.inventory_warning) {
                               setSelectedSize(recommendation.recommended_size);
@@ -254,7 +253,7 @@ function App() {
                           <span className="text-sm font-black text-green-600">{recommendation.confidence_score}%</span>
                         </div>
                         <div className="w-full h-3 bg-neutral-200 rounded-full overflow-hidden shadow-inner">
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${recommendation.confidence_score}%` }}
                             transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
@@ -275,7 +274,7 @@ function App() {
                           "{recommendation.explanation}"
                         </p>
                       </div>
-                      
+
                       {/* Rules Engine Warning (Out of Stock) */}
                       {recommendation.inventory_warning && (
                         <div className="bg-red-50 text-red-800 p-4 rounded-xl text-sm font-semibold border border-red-200 flex items-start shadow-sm">
@@ -290,24 +289,22 @@ function App() {
                       <div className="pt-5 border-t border-neutral-100">
                         <p className="text-center text-sm font-bold text-neutral-400 mb-3 uppercase tracking-wider">Was this helpful?</p>
                         <div className="flex justify-center space-x-3">
-                          <button 
+                          <button
                             onClick={() => setFeedbackGiven('yes')}
-                            className={`flex items-center justify-center px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${
-                              feedbackGiven === 'yes' 
-                                ? 'bg-green-50 border-green-500 text-green-700 shadow-sm' 
-                                : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
-                            }`}
+                            className={`flex items-center justify-center px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${feedbackGiven === 'yes'
+                              ? 'bg-green-50 border-green-500 text-green-700 shadow-sm'
+                              : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
+                              }`}
                           >
                             <HandThumbUpIcon className="w-5 h-5 mr-2" strokeWidth={2} />
                             Yes
                           </button>
-                          <button 
+                          <button
                             onClick={() => setFeedbackGiven('no')}
-                            className={`flex items-center justify-center px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${
-                              feedbackGiven === 'no' 
-                                ? 'bg-red-50 border-red-500 text-red-700 shadow-sm' 
-                                : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
-                            }`}
+                            className={`flex items-center justify-center px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${feedbackGiven === 'no'
+                              ? 'bg-red-50 border-red-500 text-red-700 shadow-sm'
+                              : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
+                              }`}
                           >
                             <HandThumbDownIcon className="w-5 h-5 mr-2" strokeWidth={2} />
                             No
@@ -315,7 +312,7 @@ function App() {
                         </div>
                         <AnimatePresence>
                           {feedbackGiven && (
-                            <motion.p 
+                            <motion.p
                               initial={{ opacity: 0, y: -5 }}
                               animate={{ opacity: 1, y: 0 }}
                               className="text-center text-xs font-semibold text-neutral-500 mt-4"
@@ -340,16 +337,16 @@ function App() {
 // ----------------------------------------------------------------------------
 // PROFILE EDITOR COMPONENT
 // ----------------------------------------------------------------------------
-function ProfileEditor({ 
-  customer, 
-  setCustomer, 
-  onBack 
-}: { 
-  customer: CustomerData, 
-  setCustomer: React.Dispatch<React.SetStateAction<CustomerData>>, 
-  onBack: () => void 
+function ProfileEditor({
+  customer,
+  setCustomer,
+  onBack
+}: {
+  customer: CustomerData,
+  setCustomer: React.Dispatch<React.SetStateAction<CustomerData>>,
+  onBack: () => void
 }) {
-  
+
   const [draftHistory, setDraftHistory] = useState<Order[]>(customer.order_history);
 
   const handleProductChange = (index: number, productName: string) => {
@@ -391,7 +388,7 @@ function ProfileEditor({
 
   const addOrder = () => {
     setDraftHistory([
-      ...draftHistory, 
+      ...draftHistory,
       {
         id: `ORD-${Math.floor(Math.random() * 10000)}`,
         product_name: AVAILABLE_PRODUCTS[0].name,
@@ -411,13 +408,13 @@ function ProfileEditor({
   };
 
   return (
-    <motion.main 
-      initial={{ opacity: 0, y: 10 }} 
-      animate={{ opacity: 1, y: 0 }} 
+    <motion.main
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto px-4 py-10"
     >
       <div className="flex items-center mb-8">
-        <button 
+        <button
           onClick={onBack}
           className="mr-4 p-2 rounded-full hover:bg-neutral-200 transition-colors"
         >
@@ -432,7 +429,7 @@ function ProfileEditor({
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
         <div className="flex justify-between items-center mb-6 border-b border-neutral-100 pb-4">
           <h2 className="text-xl font-bold">Purchase History</h2>
-          <button 
+          <button
             onClick={addOrder}
             className="flex items-center text-sm font-bold text-neutral-900 bg-neutral-100 px-3 py-1.5 rounded-lg hover:bg-neutral-200 transition-colors"
           >
@@ -444,25 +441,25 @@ function ProfileEditor({
         <div className="space-y-6">
           <AnimatePresence>
             {draftHistory.map((order, index) => (
-              <motion.div 
+              <motion.div
                 key={order.id}
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 relative group"
               >
-                <button 
+                <button
                   onClick={() => removeOrder(index)}
                   className="absolute top-4 right-4 text-neutral-400 hover:text-red-500 transition-colors"
                   title="Remove this order"
                 >
                   <TrashIcon className="w-5 h-5" />
                 </button>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pr-8">
                   <div className="md:col-span-5">
                     <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1">Product</label>
-                    <select 
+                    <select
                       value={order.product_name}
                       onChange={(e) => handleProductChange(index, e.target.value)}
                       className="w-full bg-white border border-neutral-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 outline-none"
@@ -475,8 +472,8 @@ function ProfileEditor({
 
                   <div className="md:col-span-2">
                     <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1">Size</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       step="0.5"
                       min="4" max="18"
                       value={order.size}
@@ -487,8 +484,8 @@ function ProfileEditor({
 
                   <div className="md:col-span-2 flex items-center pt-5">
                     <label className="flex items-center cursor-pointer">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         checked={order.status === 'returned'}
                         onChange={(e) => handleReturnToggle(index, e.target.checked)}
                         className="w-5 h-5 rounded border-neutral-300 text-red-600 focus:ring-red-500"
@@ -500,8 +497,8 @@ function ProfileEditor({
                   {order.status === 'returned' && (
                     <div className="md:col-span-3">
                       <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1">Reason</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         placeholder="e.g. too small"
                         value={order.return_reason || ''}
                         onChange={(e) => handleReasonChange(index, e.target.value)}
@@ -519,13 +516,13 @@ function ProfileEditor({
         </div>
 
         <div className="mt-8 flex justify-end space-x-3">
-          <button 
+          <button
             onClick={onBack}
             className="px-6 py-3 border border-neutral-300 text-neutral-700 font-bold rounded-full hover:bg-neutral-50 transition-colors"
           >
             Cancel
           </button>
-          <button 
+          <button
             onClick={handleSave}
             className="px-6 py-3 bg-neutral-900 text-white font-bold rounded-full hover:bg-black transition-colors shadow-md"
           >
