@@ -58,7 +58,7 @@ export const CATALOG_PRODUCTS: ProductAttributes[] = [
     inventory: {
       7: 5, 7.5: 5, 8: 5, 8.5: 5, 9: 12, 9.5: 5,
       10: 0, // Out of stock for size 10 to trigger the Rules Engine
-      10.5: 8, 11: 15, 11.5: 10, 12: 12, 12.5: 10, 13: 5
+      10.5: 0, 11: 15, 11.5: 10, 12: 12, 12.5: 10, 13: 5
     },
   },
   {

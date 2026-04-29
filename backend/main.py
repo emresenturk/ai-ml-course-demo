@@ -102,6 +102,7 @@ async def recommend_size(req: RecommendRequest):
     
     # If the model is loaded, predict probabilities
     if os.path.exists("model.json"):
+        print("Predicting with XGBoost model...")
         features = np.array([[historical_true_size, s, shoe_type_encoded, width_encoded] for s in sizes_to_test])
         probs = xgb_model.predict_proba(features)[:, 1] # Probability of 'kept' (class 1)
         
